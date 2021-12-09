@@ -2,26 +2,22 @@
 
 let userForm = new UserForm();
 userForm.loginFormCallback = (data) => {
-  ApiConnector.login(data, (err, data) => {
-    if (err) {
-      userForm.setLoginErrorMessage(
-        "Пользователь с таким логином и паролем не найден"
-      );
+  ApiConnector.login(data, (response) => {
+    if ((response.success = "false")) {
+      userForm.setLoginErrorMessage(response.error);
     } else {
-      console.log(data);
-      alert(JSON.stringify(data));
+      console.log(response);
       location.reload();
     }
   });
 };
 
 userForm.registerFormCallback = (data) => {
-  ApiConnector.register(data, (err, data) => {
-    if (err) {
-      userForm.setRegisterErrorMessage("Ошибка! Попробуйте снова");
+  ApiConnector.register(data, (response) => {
+    if ((response.success = "false")) {
+      userForm.setRegisterErrorMessage(response.error);
     } else {
-      console.log(data);
-      alert(JSON.stringify(data));
+      console.log(response);
       location.reload();
     }
   });
