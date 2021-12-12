@@ -2,7 +2,7 @@
 let logoutButton = new LogoutButton();
 logoutButton.action = function () {
   ApiConnector.logout((response) => {
-    if ((response.success = "true")) {
+    if (response.success === true) {
       location.reload();
     }
   });
@@ -10,7 +10,7 @@ logoutButton.action = function () {
 
 //Получение информации о пользователе
 ApiConnector.current((response) => {
-  if ((response.success = "true")) {
+  if (response.success === true) {
     ProfileWidget.showProfile(response);
   }
 });
@@ -19,7 +19,7 @@ ApiConnector.current((response) => {
 let ratesBoard = new RatesBoard();
 function exchangeRate() {
   ApiConnector.getStocks((response) => {
-    if ((response.success = "true")) {
+    if (response.success === true) {
       ratesBoard.clearTable();
       ratesBoard.fillTable(response);
     }
@@ -32,7 +32,7 @@ let timerId = setInterval(exchangeRate, 1000);
 let moneyManager = new MoneyManager();
 moneyManager.addMoneyCallback = function (data) {
   ApiConnector.addMoney(data, (response) => {
-    if ((response.success = "true")) {
+    if (response.success === true) {
       ProfileWidget.showProfile(response);
       moneyManager.setMessage(true, "Денежные средства успешно добавлены");
     } else {
@@ -43,7 +43,7 @@ moneyManager.addMoneyCallback = function (data) {
 
 moneyManager.conversionMoneyCallback = function (data) {
   ApiConnector.convertMoney(data, (response) => {
-    if ((response.success = "true")) {
+    if (response.success === true) {
       ProfileWidget.showProfile(response);
       moneyManager.setMessage(true, "Конвертация прошла успешно");
     } else {
@@ -54,7 +54,7 @@ moneyManager.conversionMoneyCallback = function (data) {
 
 moneyManager.sendMoneyCallback = function (data) {
   ApiConnector.transferMoney(data, (response) => {
-    if ((response.success = "true")) {
+    if (response.success === true) {
       ProfileWidget.showProfile(response);
       moneyManager.setMessage(true, "Перевод валюты прошёл успешно");
     } else {
@@ -66,7 +66,7 @@ moneyManager.sendMoneyCallback = function (data) {
 // Работа с избранным
 let favoritesWidget = new FavoritesWidget();
 ApiConnector.getFavorites((response) => {
-  if ((response.success = "true")) {
+  if (response.success === true) {
     favoritesWidget.clearTable();
     favoritesWidget.fillTable(response);
     moneyManager.updateUsersList(response);
@@ -75,7 +75,7 @@ ApiConnector.getFavorites((response) => {
 
 favoritesWidget.addUserCallback = function (data) {
   ApiConnector.addUserToFavorites(data, (response) => {
-    if ((response.success = "true")) {
+    if (response.success === true) {
       favoritesWidget.clearTable();
       favoritesWidget.fillTable(response);
       moneyManager.updateUsersList(response);
@@ -94,7 +94,7 @@ favoritesWidget.addUserCallback = function (data) {
 
 favoritesWidget.removeUserCallback = function (data) {
   ApiConnector.removeUserFromFavorites(data, (response) => {
-    if ((response.success = "true")) {
+    if (response.success === true) {
       favoritesWidget.clearTable();
       favoritesWidget.fillTable(response);
       moneyManager.updateUsersList(response);
