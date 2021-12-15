@@ -11,7 +11,9 @@ logoutButton.action = function () {
 //Получение информации о пользователе
 ApiConnector.current((response) => {
   if (response.success === true) {
-    ProfileWidget.showProfile(response);
+    ProfileWidget.showProfile(response.data);
+  } else {
+    alert(response.error);
   }
 });
 
@@ -21,7 +23,9 @@ function exchangeRate() {
   ApiConnector.getStocks((response) => {
     if (response.success === true) {
       ratesBoard.clearTable();
-      ratesBoard.fillTable(response);
+      ratesBoard.fillTable(response.data);
+    } else {
+      alert(response.error);
     }
   });
 }
@@ -33,10 +37,10 @@ let moneyManager = new MoneyManager();
 moneyManager.addMoneyCallback = function (data) {
   ApiConnector.addMoney(data, (response) => {
     if (response.success === true) {
-      ProfileWidget.showProfile(response);
+      ProfileWidget.showProfile(response.data);
       moneyManager.setMessage(true, "Денежные средства успешно добавлены");
     } else {
-      moneyManager.setMessage(false, "Ошибка при добавлении денежных средств");
+      moneyManager.setMessage(false, response.error);
     }
   });
 };
@@ -44,10 +48,10 @@ moneyManager.addMoneyCallback = function (data) {
 moneyManager.conversionMoneyCallback = function (data) {
   ApiConnector.convertMoney(data, (response) => {
     if (response.success === true) {
-      ProfileWidget.showProfile(response);
+      ProfileWidget.showProfile(response.data);
       moneyManager.setMessage(true, "Конвертация прошла успешно");
     } else {
-      moneyManager.setMessage(false, "Ошибка при выполнении конвертации");
+      moneyManager.setMessage(false, response.error);
     }
   });
 };
@@ -55,10 +59,10 @@ moneyManager.conversionMoneyCallback = function (data) {
 moneyManager.sendMoneyCallback = function (data) {
   ApiConnector.transferMoney(data, (response) => {
     if (response.success === true) {
-      ProfileWidget.showProfile(response);
+      ProfileWidget.showProfile(response.data);
       moneyManager.setMessage(true, "Перевод валюты прошёл успешно");
     } else {
-      moneyManager.setMessage(false, "Ошибка при выполнении перевода");
+      moneyManager.setMessage(false, response.error);
     }
   });
 };
@@ -68,8 +72,10 @@ let favoritesWidget = new FavoritesWidget();
 ApiConnector.getFavorites((response) => {
   if (response.success === true) {
     favoritesWidget.clearTable();
-    favoritesWidget.fillTable(response);
-    moneyManager.updateUsersList(response);
+    favoritesWidget.fillTable(response.data);
+    moneyManager.updateUsersList(response.data);
+  } else {
+    favoritesWidget.setMessage(false, response.error);
   }
 });
 
@@ -77,17 +83,14 @@ favoritesWidget.addUserCallback = function (data) {
   ApiConnector.addUserToFavorites(data, (response) => {
     if (response.success === true) {
       favoritesWidget.clearTable();
-      favoritesWidget.fillTable(response);
-      moneyManager.updateUsersList(response);
-      moneyManager.setMessage(
+      favoritesWidget.fillTable(response.data);
+      moneyManager.updateUsersList(response.data);
+      favoritesWidget.setMessage(
         true,
         "Пользователь успешно добавлен в список избранных"
       );
     } else {
-      moneyManager.setMessage(
-        false,
-        "Ошибка добавления пользователя в список избранных"
-      );
+      favoritesWidget.setMessage(false, response.error);
     }
   });
 };
@@ -96,17 +99,14 @@ favoritesWidget.removeUserCallback = function (data) {
   ApiConnector.removeUserFromFavorites(data, (response) => {
     if (response.success === true) {
       favoritesWidget.clearTable();
-      favoritesWidget.fillTable(response);
-      moneyManager.updateUsersList(response);
-      moneyManager.setMessage(
+      favoritesWidget.fillTable(response.data);
+      moneyManager.updateUsersList(response.data);
+      favoritesWidget.setMessage(
         true,
         "Пользователь успешно удалён из списка избранных"
       );
     } else {
-      moneyManager.setMessage(
-        false,
-        "Ошибка удаления пользователя из списка избранных"
-      );
+      favoritesWidget.setMessage(false, response.error);
     }
   });
 };
